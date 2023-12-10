@@ -61,6 +61,8 @@ class Drone {
   double? roll;
   double? pitch;
   double? yaw;
+  double? homeLatitude;
+  double? homeLongitude;
 }
 
 class Media {

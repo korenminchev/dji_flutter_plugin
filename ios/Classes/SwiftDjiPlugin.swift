@@ -984,6 +984,8 @@ public class SwiftDjiPlugin: FLTDjiFlutterApi, FlutterPlugin, FLTDjiHostApi, DJI
 		var _droneRoll: NSNumber = 0
 		var _dronePitch: NSNumber = 0
 		var _droneYaw: NSNumber = 0
+		var _droneHomeLatitude: NSNumber = 0
+		var _droneHomeLongitude: NSNumber = 0
 
 		if let altitude = state.aircraftLocation?.altitude {
 			// print("= iOS: Altitude - \(altitude)")
@@ -1014,6 +1016,8 @@ public class SwiftDjiPlugin: FLTDjiFlutterApi, FlutterPlugin, FLTDjiHostApi, DJI
 		_droneRoll = state.attitude.roll as NSNumber
 		_dronePitch = state.attitude.pitch as NSNumber
 		_droneYaw = state.attitude.yaw as NSNumber
+		_droneHomeLatitude = state.homeLocation?.coordinate.latitude as NSNumber? ?? 0
+		_droneHomeLongitude = state.homeLocation?.coordinate.longitude as NSNumber? ?? 0
 
 		// Confirm Landing
 		if state.isLandingConfirmationNeeded == true {
