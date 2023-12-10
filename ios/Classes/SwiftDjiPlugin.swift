@@ -1032,6 +1032,8 @@ public class SwiftDjiPlugin: FLTDjiFlutterApi, FlutterPlugin, FLTDjiHostApi, DJI
 		fltDrone.roll = _droneRoll
 		fltDrone.pitch = _dronePitch
 		fltDrone.yaw = _droneYaw
+		fltDrone.homeLatitude = _droneHomeLatitude
+		fltDrone.homeLongitude = _droneHomeLongitude
 
 		SwiftDjiPlugin.fltDjiFlutterApi?.setStatusDrone(fltDrone) { e in
 			if let error = e {
