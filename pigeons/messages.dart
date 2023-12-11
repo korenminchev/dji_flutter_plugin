@@ -86,6 +86,7 @@ abstract class DjiHostApi {
   void takeOff();
   void land();
   void start(String flightJson);
+  void setDroneHomeLocation(double latitude, double longitude);
   void mobileRemoteController(
     bool enabled,
     double leftStickHorizontal,

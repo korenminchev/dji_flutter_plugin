@@ -431,6 +431,27 @@ void FLTDjiHostApiSetup(id<FlutterBinaryMessenger> binaryMessenger, NSObject<FLT
   {
     FlutterBasicMessageChannel *channel =
       [[FlutterBasicMessageChannel alloc]
+        initWithName:@"dev.flutter.pigeon.DjiHostApi.setDroneHomeLocation"
+        binaryMessenger:binaryMessenger
+        codec:FLTDjiHostApiGetCodec()];
+    if (api) {
+      NSCAssert([api respondsToSelector:@selector(setDroneHomeLocationLatitude:longitude:error:)], @"FLTDjiHostApi api (%@) doesn't respond to @selector(setDroneHomeLocationLatitude:longitude:error:)", api);
+      [channel setMessageHandler:^(id _Nullable message, FlutterReply callback) {
+        NSArray *args = message;
+        NSNumber *arg_latitude = GetNullableObjectAtIndex(args, 0);
+        NSNumber *arg_longitude = GetNullableObjectAtIndex(args, 1);
+        FlutterError *error;
+        [api setDroneHomeLocationLatitude:arg_latitude longitude:arg_longitude error:&error];
+        callback(wrapResult(nil, error));
+      }];
+    }
+    else {
+      [channel setMessageHandler:nil];
+    }
+  }
+  {
+    FlutterBasicMessageChannel *channel =
+      [[FlutterBasicMessageChannel alloc]
         initWithName:@"dev.flutter.pigeon.DjiHostApi.mobileRemoteController"
         binaryMessenger:binaryMessenger
         codec:FLTDjiHostApiGetCodec()];

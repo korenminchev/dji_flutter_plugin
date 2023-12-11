@@ -85,6 +85,22 @@ public class SwiftDjiPlugin: FLTDjiFlutterApi, FlutterPlugin, FLTDjiHostApi, DJI
 		return result
 	}
 
+	public func setDroneHomeLocationLatitude(_ latitude: NSNumber, longitude: NSNumber, error _: AutoreleasingUnsafeMutablePointer<FlutterError?>) {
+		if let _droneFlightController = drone?.flightController {
+			// get the current home location
+			let previousHomeLocation = _droneFlightController.homeLocation
+			// only set the longitude and latitude
+			let newHomelocation = CLLocation(coordinate: CLLocationCoordinate2D(latitude: CLLocationDegrees(truncating: latitude), longitude: CLLocationDegrees(truncating: longitude)), altitude: homeLocation?.altitude ?? 0, horizontalAccuracy: homeLocation?.horizontalAccuracy ?? 0, verticalAccuracy: homeLocation?.verticalAccuracy ?? 0, timestamp: homeLocation?.timestamp ?? Date())
+
+			_droneFlightController.setHomeLocation(location)
+			print("=== DjiPlugin iOS: Drone Home Location Coordinates: \(latitude), \(longitude)")
+		} else {
+			print("=== DjiPlugin iOS: Drone Home Location Failed - No Flight Controller")
+			_fltSetStatus("Error")
+			_fltSetError("Drone Home Location Failed - No Flight Controller")
+		}
+	}
+
 	public func registerAppWithError(_: AutoreleasingUnsafeMutablePointer<FlutterError?>) {
 		print("=== DjiPlugin iOS: Register App Started")
 		DJISDKManager.registerApp(with: self)

@@ -433,6 +433,28 @@ class DjiHostApi {
     }
   }
 
+  Future<void> setDroneHomeLocation(double arg_latitude, double arg_longitude) async {
+    final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
+        'dev.flutter.pigeon.DjiHostApi.setDroneHomeLocation', codec,
+        binaryMessenger: _binaryMessenger);
+    final List<Object?>? replyList =
+        await channel.send(<Object?>[arg_latitude, arg_longitude]) as List<Object?>?;
+    if (replyList == null) {
+      throw PlatformException(
+        code: 'channel-error',
+        message: 'Unable to establish connection on channel.',
+      );
+    } else if (replyList.length > 1) {
+      throw PlatformException(
+        code: replyList[0]! as String,
+        message: replyList[1] as String?,
+        details: replyList[2],
+      );
+    } else {
+      return;
+    }
+  }
+
   Future<void> mobileRemoteController(bool arg_enabled, double arg_leftStickHorizontal, double arg_leftStickVertical, double arg_rightStickHorizontal, double arg_rightStickVertical) async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
         'dev.flutter.pigeon.DjiHostApi.mobileRemoteController', codec,

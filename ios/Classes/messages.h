@@ -80,6 +80,7 @@ NSObject<FlutterMessageCodec> *FLTDjiHostApiGetCodec(void);
 - (void)takeOffWithError:(FlutterError *_Nullable *_Nonnull)error;
 - (void)landWithError:(FlutterError *_Nullable *_Nonnull)error;
 - (void)startFlightJson:(NSString *)flightJson error:(FlutterError *_Nullable *_Nonnull)error;
+- (void)setDroneHomeLocationLatitude:(NSNumber *)latitude longitude:(NSNumber *)longitude error:(FlutterError *_Nullable *_Nonnull)error;
 - (void)mobileRemoteControllerEnabled:(NSNumber *)enabled leftStickHorizontal:(NSNumber *)leftStickHorizontal leftStickVertical:(NSNumber *)leftStickVertical rightStickHorizontal:(NSNumber *)rightStickHorizontal rightStickVertical:(NSNumber *)rightStickVertical error:(FlutterError *_Nullable *_Nonnull)error;
 - (void)virtualStickEnabled:(NSNumber *)enabled pitch:(NSNumber *)pitch roll:(NSNumber *)roll yaw:(NSNumber *)yaw verticalThrottle:(NSNumber *)verticalThrottle error:(FlutterError *_Nullable *_Nonnull)error;
 - (void)gimbalRotatePitchDegrees:(NSNumber *)degrees error:(FlutterError *_Nullable *_Nonnull)error;

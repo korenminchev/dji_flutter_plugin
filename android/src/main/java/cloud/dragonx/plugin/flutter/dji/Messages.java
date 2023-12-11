@@ -433,6 +433,7 @@ public class Messages {
     void takeOff();
     void land();
     void start(@NonNull String flightJson);
+    void setDroneHomeLocation(@NonNull Double latitude, @NonNull Double longitude);
     void mobileRemoteController(@NonNull Boolean enabled, @NonNull Double leftStickHorizontal, @NonNull Double leftStickVertical, @NonNull Double rightStickHorizontal, @NonNull Double rightStickVertical);
     void virtualStick(@NonNull Boolean enabled, @NonNull Double pitch, @NonNull Double roll, @NonNull Double yaw, @NonNull Double verticalThrottle);
     void gimbalRotatePitch(@NonNull Double degrees);
@@ -623,6 +624,36 @@ public class Messages {
                 throw new NullPointerException("flightJsonArg unexpectedly null.");
               }
               api.start(flightJsonArg);
+              wrapped.add(0, null);
+            }
+            catch (Error | RuntimeException exception) {
+              ArrayList<Object> wrappedError = wrapError(exception);
+              wrapped = wrappedError;
+            }
+            reply.reply(wrapped);
+          });
+        } else {
+          channel.setMessageHandler(null);
+        }
+      }
+      {
+        BasicMessageChannel<Object> channel =
+            new BasicMessageChannel<>(binaryMessenger, "dev.flutter.pigeon.DjiHostApi.setDroneHomeLocation", getCodec());
+        if (api != null) {
+          channel.setMessageHandler((message, reply) -> {
+            ArrayList wrapped = new ArrayList<>();
+            try {
+              ArrayList<Object> args = (ArrayList<Object>)message;
+              assert args != null;
+              Double latitudeArg = (Double)args.get(0);
+              if (latitudeArg == null) {
+                throw new NullPointerException("latitudeArg unexpectedly null.");
+              }
+              Double longitudeArg = (Double)args.get(1);
+              if (longitudeArg == null) {
+                throw new NullPointerException("longitudeArg unexpectedly null.");
+              }
+              api.setDroneHomeLocation(latitudeArg, longitudeArg);
               wrapped.add(0, null);
             }
             catch (Error | RuntimeException exception) {
