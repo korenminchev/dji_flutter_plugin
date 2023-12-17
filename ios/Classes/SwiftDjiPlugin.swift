@@ -12,6 +12,7 @@ public class SwiftDjiPlugin: FLTDjiFlutterApi, FlutterPlugin, FLTDjiHostApi, DJI
 	
 	var drone: DJIAircraft?
 	var droneCurrentLocation: CLLocation?
+	var droneCurrentHomeLocation: CLLocation?
 	var mediaFileList = [DJIMediaFile?]()
 	var videoFeedUrl: URL?
 	var videoFeedPath: String?
@@ -87,13 +88,27 @@ public class SwiftDjiPlugin: FLTDjiFlutterApi, FlutterPlugin, FLTDjiHostApi, DJI
 
 	public func setDroneHomeLocationLatitude(_ latitude: NSNumber, longitude: NSNumber, error _: AutoreleasingUnsafeMutablePointer<FlutterError?>) {
 		if let _droneFlightController = drone?.flightController {
-			// get the current home location
-			let previousHomeLocation = _droneFlightController.homeLocation
-			// only set the longitude and latitude
-			let newHomelocation = CLLocation(coordinate: CLLocationCoordinate2D(latitude: CLLocationDegrees(truncating: latitude), longitude: CLLocationDegrees(truncating: longitude)), altitude: homeLocation?.altitude ?? 0, horizontalAccuracy: homeLocation?.horizontalAccuracy ?? 0, verticalAccuracy: homeLocation?.verticalAccuracy ?? 0, timestamp: homeLocation?.timestamp ?? Date())
+			// use the current home location for parameters other than latitude and longitude
+			// let newHomelocation = CLLocation(coordinate: CLLocationCoordinate2D(latitude: latitude, longitude: longitude), 
+			// 	altitude: droneCurrentHomeLocation?.altitude ?? 0,
+			// 	horizontalAccuracy: droneCurrentHomeLocation?.horizontalAccuracy ?? 0,
+			// 	verticalAccuracy: droneCurrentHomeLocation?.verticalAccuracy ?? 0,
+			// 	timestamp: droneCurrentHomeLocation?.timestamp ?? Date())
 
-			_droneFlightController.setHomeLocation(location)
-			print("=== DjiPlugin iOS: Drone Home Location Coordinates: \(latitude), \(longitude)")
+			if let currentLocation = droneCurrentLocation {
+				// create another copy of the current location but with the new latitude and longitude
+				let newHomelocation = CLLocation(coordinate: CLLocationCoordinate2D(latitude: latitude.doubleValue, longitude: longitude.doubleValue), 
+					altitude: currentLocation.altitude,
+					horizontalAccuracy: currentLocation.horizontalAccuracy,
+					verticalAccuracy: currentLocation.verticalAccuracy,
+					timestamp: currentLocation.timestamp)
+				
+				print("=== Attempting DjiPlugin iOS: Drone Home Location Coordinates: \(currentLocation.coordinate.latitude), \(currentLocation.coordinate.longitude)")
+
+				_droneFlightController.setHomeLocation(currentLocation)
+				
+				print("=== DjiPlugin iOS: Drone Home Location Coordinates: \(currentLocation.coordinate.latitude), \(currentLocation.coordinate.longitude)")
+			}
 		} else {
 			print("=== DjiPlugin iOS: Drone Home Location Failed - No Flight Controller")
 			_fltSetStatus("Error")
@@ -1000,8 +1015,6 @@ public class SwiftDjiPlugin: FLTDjiFlutterApi, FlutterPlugin, FLTDjiHostApi, DJI
 		var _droneRoll: NSNumber = 0
 		var _dronePitch: NSNumber = 0
 		var _droneYaw: NSNumber = 0
-		var _droneHomeLatitude: NSNumber = 0
-		var _droneHomeLongitude: NSNumber = 0
 
 		if let altitude = state.aircraftLocation?.altitude {
 			// print("= iOS: Altitude - \(altitude)")
@@ -1011,6 +1024,10 @@ public class SwiftDjiPlugin: FLTDjiFlutterApi, FlutterPlugin, FLTDjiHostApi, DJI
 		// Updating the drone's current location coordinates variable
 		if let droneLocation = state.aircraftLocation {
 			droneCurrentLocation = droneLocation
+		}
+
+		if let droneHomeLocation = state.homeLocation {
+			droneCurrentHomeLocation = droneHomeLocation
 		}
 
 		if let latitude = state.aircraftLocation?.coordinate.latitude {
@@ -1032,8 +1049,6 @@ public class SwiftDjiPlugin: FLTDjiFlutterApi, FlutterPlugin, FLTDjiHostApi, DJI
 		_droneRoll = state.attitude.roll as NSNumber
 		_dronePitch = state.attitude.pitch as NSNumber
 		_droneYaw = state.attitude.yaw as NSNumber
-		_droneHomeLatitude = state.homeLocation?.coordinate.latitude as NSNumber? ?? 0
-		_droneHomeLongitude = state.homeLocation?.coordinate.longitude as NSNumber? ?? 0
 
 		// Confirm Landing
 		if state.isLandingConfirmationNeeded == true {
@@ -1048,8 +1063,8 @@ public class SwiftDjiPlugin: FLTDjiFlutterApi, FlutterPlugin, FLTDjiHostApi, DJI
 		fltDrone.roll = _droneRoll
 		fltDrone.pitch = _dronePitch
 		fltDrone.yaw = _droneYaw
-		fltDrone.homeLatitude = _droneHomeLatitude
-		fltDrone.homeLongitude = _droneHomeLongitude
+		fltDrone.homeLatitude = droneCurrentHomeLocation?.coordinate.latitude as NSNumber?
+		fltDrone.homeLongitude = droneCurrentHomeLocation?.coordinate.longitude as NSNumber?
 
 		SwiftDjiPlugin.fltDjiFlutterApi?.setStatusDrone(fltDrone) { e in
 			if let error = e {

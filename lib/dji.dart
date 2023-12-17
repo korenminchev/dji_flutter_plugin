@@ -405,6 +405,16 @@ class Dji {
     );
   }
 
+  static Future<void> setDroneHomeLocation({
+    required double latitude,
+    required double longitude,
+  }) async {
+    await _api?.setDroneHomeLocation(
+      latitude,
+      longitude,
+    );
+  }
+
   /// Update Gimbal pitch value in degrees
   ///
   /// Controls the Gimbal pitch in [degrees] (-90..0) in Absolute Mode.
