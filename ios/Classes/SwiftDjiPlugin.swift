@@ -103,11 +103,11 @@ public class SwiftDjiPlugin: FLTDjiFlutterApi, FlutterPlugin, FLTDjiHostApi, DJI
 					verticalAccuracy: currentLocation.verticalAccuracy,
 					timestamp: currentLocation.timestamp)
 				
-				print("=== Attempting DjiPlugin iOS: Drone Home Location Coordinates: \(currentLocation.coordinate.latitude), \(currentLocation.coordinate.longitude)")
+				print("=== Attempting DjiPlugin iOS: Drone Home Location Coordinates: \(newHomelocation.coordinate.latitude), \(newHomelocation.coordinate.longitude)")
 
-				_droneFlightController.setHomeLocation(currentLocation)
+				_droneFlightController.setHomeLocation(newHomelocation)
 				
-				print("=== DjiPlugin iOS: Drone Home Location Coordinates: \(currentLocation.coordinate.latitude), \(currentLocation.coordinate.longitude)")
+				print("=== DjiPlugin iOS: Drone Home Location Coordinates: \(newHomelocation.coordinate.latitude), \(newHomelocation.coordinate.longitude)")
 			}
 		} else {
 			print("=== DjiPlugin iOS: Drone Home Location Failed - No Flight Controller")
