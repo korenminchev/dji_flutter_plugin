@@ -91,6 +91,12 @@ public class Messages {
 
   /** Generated class from Pigeon that represents data sent in messages. */
   public static class Drone {
+    private @Nullable String uuid;
+    public @Nullable String getUuid() { return uuid; }
+    public void setUuid(@Nullable String setterArg) {
+      this.uuid = setterArg;
+    }
+
     private @Nullable String status;
     public @Nullable String getStatus() { return status; }
     public void setStatus(@Nullable String setterArg) {
@@ -164,6 +170,11 @@ public class Messages {
     }
 
     public static final class Builder {
+      private @Nullable String uuid;
+      public @NonNull Builder setUuid(@Nullable String setterArg) {
+        this.uuid = setterArg;
+        return this;
+      }
       private @Nullable String status;
       public @NonNull Builder setStatus(@Nullable String setterArg) {
         this.status = setterArg;
@@ -226,6 +237,7 @@ public class Messages {
       }
       public @NonNull Drone build() {
         Drone pigeonReturn = new Drone();
+        pigeonReturn.setUuid(uuid);
         pigeonReturn.setStatus(status);
         pigeonReturn.setError(error);
         pigeonReturn.setBatteryPercent(batteryPercent);
@@ -242,7 +254,8 @@ public class Messages {
       }
     }
     @NonNull ArrayList<Object> toList() {
-      ArrayList<Object> toListResult = new ArrayList<Object>(12);
+      ArrayList<Object> toListResult = new ArrayList<Object>(13);
+      toListResult.add(uuid);
       toListResult.add(status);
       toListResult.add(error);
       toListResult.add(batteryPercent);
@@ -259,29 +272,31 @@ public class Messages {
     }
     static @NonNull Drone fromList(@NonNull ArrayList<Object> list) {
       Drone pigeonResult = new Drone();
-      Object status = list.get(0);
+      Object uuid = list.get(0);
+      pigeonResult.setUuid((String)uuid);
+      Object status = list.get(1);
       pigeonResult.setStatus((String)status);
-      Object error = list.get(1);
+      Object error = list.get(2);
       pigeonResult.setError((String)error);
-      Object batteryPercent = list.get(2);
+      Object batteryPercent = list.get(3);
       pigeonResult.setBatteryPercent((Double)batteryPercent);
-      Object altitude = list.get(3);
+      Object altitude = list.get(4);
       pigeonResult.setAltitude((Double)altitude);
-      Object latitude = list.get(4);
+      Object latitude = list.get(5);
       pigeonResult.setLatitude((Double)latitude);
-      Object longitude = list.get(5);
+      Object longitude = list.get(6);
       pigeonResult.setLongitude((Double)longitude);
-      Object speed = list.get(6);
+      Object speed = list.get(7);
       pigeonResult.setSpeed((Double)speed);
-      Object roll = list.get(7);
+      Object roll = list.get(8);
       pigeonResult.setRoll((Double)roll);
-      Object pitch = list.get(8);
+      Object pitch = list.get(9);
       pigeonResult.setPitch((Double)pitch);
-      Object yaw = list.get(9);
+      Object yaw = list.get(10);
       pigeonResult.setYaw((Double)yaw);
-      Object homeLatitude = list.get(10);
+      Object homeLatitude = list.get(11);
       pigeonResult.setHomeLatitude((Double)homeLatitude);
-      Object homeLongitude = list.get(11);
+      Object homeLongitude = list.get(12);
       pigeonResult.setHomeLongitude((Double)homeLongitude);
       return pigeonResult;
     }

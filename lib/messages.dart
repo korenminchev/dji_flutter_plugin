@@ -51,6 +51,7 @@ class Battery {
 
 class Drone {
   Drone({
+    this.uuid,
     this.status,
     this.error,
     this.batteryPercent,
@@ -64,6 +65,8 @@ class Drone {
     this.homeLatitude,
     this.homeLongitude,
   });
+
+  String? uuid;
 
   String? status;
 
@@ -91,6 +94,7 @@ class Drone {
 
   Object encode() {
     return <Object?>[
+      uuid,
       status,
       error,
       batteryPercent,
@@ -109,18 +113,19 @@ class Drone {
   static Drone decode(Object result) {
     result as List<Object?>;
     return Drone(
-      status: result[0] as String?,
-      error: result[1] as String?,
-      batteryPercent: result[2] as double?,
-      altitude: result[3] as double?,
-      latitude: result[4] as double?,
-      longitude: result[5] as double?,
-      speed: result[6] as double?,
-      roll: result[7] as double?,
-      pitch: result[8] as double?,
-      yaw: result[9] as double?,
-      homeLatitude: result[10] as double?,
-      homeLongitude: result[11] as double?,
+      uuid: result[0] as String?,
+      status: result[1] as String?,
+      error: result[2] as String?,
+      batteryPercent: result[3] as double?,
+      altitude: result[4] as double?,
+      latitude: result[5] as double?,
+      longitude: result[6] as double?,
+      speed: result[7] as double?,
+      roll: result[8] as double?,
+      pitch: result[9] as double?,
+      yaw: result[10] as double?,
+      homeLatitude: result[11] as double?,
+      homeLongitude: result[12] as double?,
     );
   }
 }

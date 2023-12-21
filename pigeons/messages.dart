@@ -51,6 +51,7 @@ class Battery {
 
 class Drone {
   // DroneState? state;
+  String? uuid;
   String? status;
   String? error;
   double? batteryPercent;

@@ -1008,6 +1008,7 @@ public class SwiftDjiPlugin: FLTDjiFlutterApi, FlutterPlugin, FLTDjiHostApi, DJI
 	// MARK: - DJIFlightController Delegate Methods
 
 	public func flightController(_ fc: DJIFlightController, didUpdate state: DJIFlightControllerState) {
+		var _droneSerialNumber: String = ""
 		var _droneLatitude: NSNumber = 0
 		var _droneLongitude: NSNumber = 0
 		var _droneAltitude: NSNumber = 0
@@ -1015,6 +1016,16 @@ public class SwiftDjiPlugin: FLTDjiFlutterApi, FlutterPlugin, FLTDjiHostApi, DJI
 		var _droneRoll: NSNumber = 0
 		var _dronePitch: NSNumber = 0
 		var _droneYaw: NSNumber = 0
+
+		// create a completion block for getSerialNumberWithCompletion
+		let completionBlock: (String?, Error?) -> Void = { (serialNumber, error) in
+			if let serialNumber = serialNumber {
+				self.fltDrone.uuid = serialNumber
+			} else {
+				print("=== DjiPlugin iOS: Error: Serial Number - \(String(describing: error?.localizedDescription))")
+			}
+		}
+		fc.getSerialNumber(completion: completionBlock);
 
 		if let altitude = state.aircraftLocation?.altitude {
 			// print("= iOS: Altitude - \(altitude)")
@@ -1054,6 +1065,7 @@ public class SwiftDjiPlugin: FLTDjiFlutterApi, FlutterPlugin, FLTDjiHostApi, DJI
 		if state.isLandingConfirmationNeeded == true {
 			fc.confirmLanding(completion: nil)
 		}
+
 
 		// Updating Flutter
 		fltDrone.latitude = _droneLatitude

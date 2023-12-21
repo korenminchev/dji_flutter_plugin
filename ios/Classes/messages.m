@@ -88,7 +88,8 @@ static id GetNullableObjectAtIndex(NSArray* array, NSInteger key) {
 @end
 
 @implementation FLTDrone
-+ (instancetype)makeWithStatus:(nullable NSString *)status
++ (instancetype)makeWithUuid:(nullable NSString *)uuid
+    status:(nullable NSString *)status
     error:(nullable NSString *)error
     batteryPercent:(nullable NSNumber *)batteryPercent
     altitude:(nullable NSNumber *)altitude
@@ -101,6 +102,7 @@ static id GetNullableObjectAtIndex(NSArray* array, NSInteger key) {
     homeLatitude:(nullable NSNumber *)homeLatitude
     homeLongitude:(nullable NSNumber *)homeLongitude {
   FLTDrone* pigeonResult = [[FLTDrone alloc] init];
+  pigeonResult.uuid = uuid;
   pigeonResult.status = status;
   pigeonResult.error = error;
   pigeonResult.batteryPercent = batteryPercent;
@@ -117,23 +119,25 @@ static id GetNullableObjectAtIndex(NSArray* array, NSInteger key) {
 }
 + (FLTDrone *)fromList:(NSArray *)list {
   FLTDrone *pigeonResult = [[FLTDrone alloc] init];
-  pigeonResult.status = GetNullableObjectAtIndex(list, 0);
-  pigeonResult.error = GetNullableObjectAtIndex(list, 1);
-  pigeonResult.batteryPercent = GetNullableObjectAtIndex(list, 2);
-  pigeonResult.altitude = GetNullableObjectAtIndex(list, 3);
-  pigeonResult.latitude = GetNullableObjectAtIndex(list, 4);
-  pigeonResult.longitude = GetNullableObjectAtIndex(list, 5);
-  pigeonResult.speed = GetNullableObjectAtIndex(list, 6);
-  pigeonResult.roll = GetNullableObjectAtIndex(list, 7);
-  pigeonResult.pitch = GetNullableObjectAtIndex(list, 8);
-  pigeonResult.yaw = GetNullableObjectAtIndex(list, 9);
-  pigeonResult.homeLatitude = GetNullableObjectAtIndex(list, 10);
-  pigeonResult.homeLongitude = GetNullableObjectAtIndex(list, 11);
+  pigeonResult.uuid = GetNullableObjectAtIndex(list, 0);
+  pigeonResult.status = GetNullableObjectAtIndex(list, 1);
+  pigeonResult.error = GetNullableObjectAtIndex(list, 2);
+  pigeonResult.batteryPercent = GetNullableObjectAtIndex(list, 3);
+  pigeonResult.altitude = GetNullableObjectAtIndex(list, 4);
+  pigeonResult.latitude = GetNullableObjectAtIndex(list, 5);
+  pigeonResult.longitude = GetNullableObjectAtIndex(list, 6);
+  pigeonResult.speed = GetNullableObjectAtIndex(list, 7);
+  pigeonResult.roll = GetNullableObjectAtIndex(list, 8);
+  pigeonResult.pitch = GetNullableObjectAtIndex(list, 9);
+  pigeonResult.yaw = GetNullableObjectAtIndex(list, 10);
+  pigeonResult.homeLatitude = GetNullableObjectAtIndex(list, 11);
+  pigeonResult.homeLongitude = GetNullableObjectAtIndex(list, 12);
   return pigeonResult;
 }
 + (nullable FLTDrone *)nullableFromList:(NSArray *)list { return (list) ? [FLTDrone fromList:list] : nil; }
 - (NSArray *)toList {
   return @[
+    (self.uuid ?: [NSNull null]),
     (self.status ?: [NSNull null]),
     (self.error ?: [NSNull null]),
     (self.batteryPercent ?: [NSNull null]),
